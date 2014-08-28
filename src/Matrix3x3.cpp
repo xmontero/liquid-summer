@@ -69,6 +69,14 @@ void Matrix3x3::createRotationXYZ( double angleX, double angleY, double angleZ )
 	( * this ) = ( rX * rY ) * rZ;
 }
 
+void Matrix3x3::createScaleXYZ( double scaleX, double scaleY, double scaleZ )
+{
+	identity();
+	a[ 0 ][ 0 ] = scaleX;
+	a[ 1 ][ 1 ] = scaleY;
+	a[ 2 ][ 2 ] = scaleZ;
+}
+
 /*
 Matrix3x3 & Matrix3x3::operator +( const Matrix3x3 & rhs )
 {
@@ -150,4 +158,11 @@ void Matrix3x3::setColumnVector( const Vector3d & value, int j )
 	a[ 0 ][ j - 1 ] = value.x;
 	a[ 1 ][ j - 1 ] = value.y;
 	a[ 2 ][ j - 1 ] = value.z;
+}
+
+void Matrix3x3::setRowVector( const Vector3d & value, int i )
+{
+	a[ i - 1 ][ 0 ] = value.x;
+	a[ i - 1 ][ 1 ] = value.y;
+	a[ i - 1 ][ 2 ] = value.z;
 }

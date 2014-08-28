@@ -40,10 +40,14 @@ class LiquidSummer
 		int spriteHeight = 100;
 		int x = SCREEN_WIDTH / 2;
 		int y = SCREEN_HEIGHT / 2;
-		int mouseX = x;
-		int mouseY = y;
+		int mouseXLeft = x;
+		int mouseYLeft = y;
+		int mouseXRight = x;
+		int mouseYRight = y;
 		bool mousePressed = false;
-		bool mouseValid = false;
+		bool mouseValidLeft = false;
+		bool mouseValidRight = false;
+		int displayedStarField = 2;
 		
 		int elapsedFrames = 0;
 		std::chrono::high_resolution_clock::time_point chronoStart;

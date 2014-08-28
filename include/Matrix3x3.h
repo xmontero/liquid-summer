@@ -21,6 +21,7 @@ class Matrix3x3
 		void createRotationY( double angle );
 		void createRotationZ( double angle );
 		void createRotationXYZ( double angleX, double angleY, double angleZ );
+		void createScaleXYZ( double scaleX, double scaleY, double scaleZ );
 		//Matrix3x3 & operator +( const Matrix3x3 & rhs );
 		Matrix3x3 & operator *( const Matrix3x3 & rhs );
 		Vector3d operator *( const Vector3d & rhs );
@@ -29,6 +30,7 @@ class Matrix3x3
 		Vector3d getColumnVector( int j ) const;
 		Vector3d getRowVector( int i ) const;
 		void setColumnVector( const Vector3d & value, int j );
+		void setRowVector( const Vector3d & value, int i );
 };
 
 #endif

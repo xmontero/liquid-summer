@@ -1,6 +1,7 @@
 #include "LiquidSummer.h"
 #include "Math.h"
 #include "StarField.h"
+#include "Fractal.h"
 
 #include <iostream>
 #include <string>
@@ -323,11 +324,13 @@ void LiquidSummer::processEvents( void )
 				{
 					case SDLK_1:
 						
+						displayedStarField = 1;
 						spriteId = 0;
 						break;
 						
 					case SDLK_2:
 						
+						displayedStarField = 2;
 						spriteId = 1;
 						break;
 						
@@ -377,9 +380,17 @@ void LiquidSummer::processEvents( void )
 				mousePressed = bool( sdlEvent.motion.state & SDL_BUTTON_LMASK );
 				if( mousePressed )
 				{
-					mouseX = sdlEvent.motion.x;
-					mouseY = sdlEvent.motion.y;
-					mouseValid = true;
+					mouseXLeft = sdlEvent.motion.x;
+					mouseYLeft = sdlEvent.motion.y;
+					mouseValidLeft = true;
+				}
+				
+				mousePressed = bool( sdlEvent.motion.state & SDL_BUTTON_RMASK );
+				if( mousePressed )
+				{
+					mouseXRight = sdlEvent.motion.x;
+					mouseYRight = sdlEvent.motion.y;
+					mouseValidRight = true;
 				}
 				
 			default:
@@ -490,7 +501,7 @@ void LiquidSummer::drawDebug( void )
 	int debugX;
 	int debugY;
 	
-	debugMessage = "elapsed: " + to_string( chronoElapsedInMicroseconds / 1000000.0 ) + " FPS: " + to_string( framesPerSecond );
+	debugMessage = "elapsed: " + to_string( chronoElapsedInMicroseconds / 1000000.0 ) + " FPS: " + to_string( framesPerSecond ) + " Press 1 or 2 to change.";
 	
 	SDL_Color color = { 255, 255, 255, 20 };
 	SDL_Texture * debugTexture = renderText( debugMessage.c_str(), color );
@@ -509,6 +520,7 @@ void LiquidSummer::drawStarField( void )
 	static const int n = 30000;
 	static const double CameraZ = 2000;
 	static StarField starField( n );
+	static Fractal fractal( n );
 	double currentZ;
 	double maxZ = 0;
 	double minZ = 0;
@@ -517,13 +529,52 @@ void LiquidSummer::drawStarField( void )
 	
 	static SDL_Point sdlPoints[ n ];
 	
-	if( mouseValid )
+	if( mouseValidLeft )
 	{
-		starField.rotationYAngularSpeed = 0.04 * ( mouseX - SCREEN_WIDTH / 2 ) / SCREEN_WIDTH;
-		starField.rotationXAngularSpeed = -0.04 * ( mouseY - SCREEN_HEIGHT / 2 ) / SCREEN_HEIGHT;
+		double normalizedMouseX = ( mouseXLeft - SCREEN_WIDTH / 2.0 ) / ( SCREEN_WIDTH / 2.0 );
+		double normalizedMouseY = ( mouseYLeft - SCREEN_HEIGHT / 2.0 ) / ( SCREEN_HEIGHT / 2.0 );
+		
+		//fractal.objectOffset.x = normalizedMouseX * SCREEN_WIDTH / 2;
+		//fractal.objectOffset.y = normalizedMouseY * SCREEN_HEIGHT / 2;
+		
+		starField.rotationYAngularSpeed = 0.02 * normalizedMouseX;
+		starField.rotationXAngularSpeed = 0.02 * normalizedMouseY;
+		
+		fractal.rotationYAngularSpeed = starField.rotationYAngularSpeed;
+		fractal.rotationXAngularSpeed = starField.rotationXAngularSpeed;
+		
+		//fractal.rotationXAngle = normalizedMouseY * pi;
+		//fractal.rotationYAngle = normalizedMouseX * pi;
 	}
 	
-	starField.step();
+	if( mouseValidRight )
+	{
+		//double normalizedMouseX = ( mouseXRight - SCREEN_WIDTH / 2.0 ) / ( SCREEN_WIDTH / 2.0 );
+		//double normalizedMouseY = ( mouseYRight - SCREEN_HEIGHT / 2.0 ) / ( SCREEN_HEIGHT / 2.0 );
+		
+		//starField.rotationYAngularSpeed = 0.02 * normalizedMouseX;
+		//starField.rotationXAngularSpeed = 0.02 * normalizedMouseY;
+		
+		//fractal.rotationYAngularSpeed = starField.rotationYAngularSpeed;
+		//fractal.rotationXAngularSpeed = starField.rotationXAngularSpeed;
+		
+		//fractal.rotationXAngle = normalizedMouseY * pi;
+		//fractal.rotationYAngle = normalizedMouseX * pi;
+		
+	}
+	
+	switch( displayedStarField )
+	{
+		case 1:
+			
+			starField.step();
+			break;
+			
+		case 2:
+			
+			fractal.step();
+			break;
+	}
 	
 	//---------------------------------------------------------------------//
 	//                                                                     //
@@ -552,12 +603,39 @@ void LiquidSummer::drawStarField( void )
 	
 	for( int i = 0; i < n; i++ )
 	{
-		projectionFactor = CameraZ / ( CameraZ - starField.starField[ i ].z );
+		Vector3d star;
+		double distanceFromCameraToRealZ;
 		
-		sdlPoints[ i ].x = ( projectionFactor * starField.starField[ i ].x ) + SCREEN_WIDTH / 2;
-		sdlPoints[ i ].y = ( projectionFactor * starField.starField[ i ].y ) + SCREEN_HEIGHT / 2;
+		switch( displayedStarField )
+		{
+			case 1:
+						
+				star = starField.starField[ i ];
+				break;
+				
+			case 2:
+				
+				star = fractal.starField[ i ];
+				break;
+		}
 		
-		currentZ = starField.starField[ i ].z;
+		distanceFromCameraToRealZ = ( CameraZ - star.z );
+		
+		if( distanceFromCameraToRealZ > 0 )
+		{
+			projectionFactor = CameraZ / distanceFromCameraToRealZ;
+			
+			sdlPoints[ i ].x = ( projectionFactor * star.x ) + SCREEN_WIDTH / 2;
+			sdlPoints[ i ].y = -( projectionFactor * star.y ) + SCREEN_HEIGHT / 2;
+		}
+		else
+		{
+			double disablePaintingPosition = -1;
+			sdlPoints[ i ].x = disablePaintingPosition;
+			sdlPoints[ i ].y = disablePaintingPosition;
+		}
+		
+		currentZ = star.z;
 		
 		if( maxZ < currentZ )
 		{
@@ -576,11 +654,60 @@ void LiquidSummer::drawStarField( void )
 	
 	for( int i = 0; i < n; i++ )
 	{
-		double zIndex1 = ( starField.starField[ i ].z - minZ ) / zRange;
+		int r, g, b, a;
+		
+		Vector3d star;
+		
+		switch( displayedStarField )
+		{
+			case 1:
+						
+				star = starField.starField[ i ];
+				break;
+				
+			case 2:
+				
+				star = fractal.starField[ i ];
+				break;
+		}
+		
+		double zIndex1 = ( star.z - minZ ) / zRange;
 		double zIndex2 = zIndex1 * zIndex1;
 		double zIndex3 = zIndex2 * zIndex1;
 		
-		SDL_SetRenderDrawColor( sdlRenderer, 192 * zIndex1, 255 * zIndex3, 128 * zIndex3 , 128 * zIndex2 );
+		switch( displayedStarField )
+		{
+			case 1:
+						
+				r = 192 * zIndex1;
+				g = 255 * zIndex3;
+				b = 128 * zIndex3;
+				a = 128 * zIndex2;
+				break;
+				
+			case 2:
+				
+				if( false /* opaque */ )
+				{
+					r = 0;
+					g = 255;
+					b = 0;
+					a = 255;
+				}
+				else
+				{
+					r = 192 * zIndex3;
+					g = 255 * zIndex1;
+					b = 255 * zIndex3;
+					a = 128 * zIndex2 + 128;
+				}
+				
+				break;
+		}
+		
+		SDL_SetRenderDrawColor( sdlRenderer, r, g, b, a );
 		SDL_RenderDrawPoint( sdlRenderer, sdlPoints[ i ].x, sdlPoints[ i ].y );
 	}
 }
+
+// SDL_SetRenderDrawColor( sdlRenderer, 192 * zIndex1, 255 * zIndex3, 128 * zIndex3 , 128 * zIndex2 );

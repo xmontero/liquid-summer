@@ -8,11 +8,23 @@ Vector3d::Vector3d()
 	zero();
 }
 
+Vector3d::Vector3d( double newX, double newY, double newZ )
+{
+	setXYZ( newX, newY, newZ );
+}
+
 void Vector3d::zero( void )
 {
-	x = 0;
-	y = 0;
-	z = 0;
+	setXYZ( 0, 0 ,0 );
+}
+
+Vector3d & Vector3d::setXYZ( double newX, double newY, double newZ )
+{
+	x = newX;
+	y = newY;
+	z = newZ;
+	
+	return ( * this );
 }
 
 void Vector3d::randomize( double maxModulus )
@@ -26,6 +38,13 @@ void Vector3d::randomize( double maxModulus )
 	phiAzimuth = ( rand() / ( double( RAND_MAX ) / ( 2 * pi ) ) );
 	
 	setModulusZenithAndAzimuth( modulus, thetaZenith, phiAzimuth );
+}
+
+void Vector3d::scale( double k )
+{
+	x *= k;
+	y *= k;
+	z *= k;
 }
 
 void Vector3d::setModulusZenithAndAzimuth( double modulus, double thetaZenith, double phiAzimuth )
@@ -46,6 +65,28 @@ double Vector3d::getModulus( void )
 	return sqrt( modulusSquared );
 }
 
+Vector3d Vector3d::operator+( const Vector3d & rhs ) const
+{
+	Vector3d result;
+	
+	result.x = x + rhs.x;
+	result.y = y + rhs.y;
+	result.z = z + rhs.z;
+	
+	return result;
+}
+
+Vector3d Vector3d::operator-( const Vector3d & rhs ) const
+{
+	Vector3d result;
+	
+	result.x = x - rhs.x;
+	result.y = y - rhs.y;
+	result.z = z - rhs.z;
+	
+	return result;
+}
+
 Vector3d & Vector3d::operator+=( const Vector3d & rhs )
 {
 	x += rhs.x;
@@ -54,7 +95,7 @@ Vector3d & Vector3d::operator+=( const Vector3d & rhs )
 	return * this;
 }
 
-double Vector3d::operator*( const Vector3d & rhs )
+double Vector3d::operator*( const Vector3d & rhs ) const
 {
 	return x * rhs.x + y * rhs.y + z * rhs.z;
 }

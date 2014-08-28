@@ -45,8 +45,11 @@ find_package( SDL2_ttf REQUIRED )
 include_directories( ${SDL2_TTF_INCLUDE_DIR} )
 
 add_executable( liquid-summer
-	src/main.cpp
+	src/AffineTransformation.cpp
+	src/AffineTransformations.cpp
+	src/Fractal.cpp
 	src/LiquidSummer.cpp
+	src/main.cpp
 	src/Matrix3x3.cpp
 	src/StarField.cpp
 	src/Vector3d.cpp
