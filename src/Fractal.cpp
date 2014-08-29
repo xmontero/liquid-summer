@@ -30,23 +30,23 @@ void Fractal::initAffineTransformations( void )
 	// f_4(x,y) = [0.00 0.00; 0.00 0.16][x; y]
 	
 	affineTransformationId = 0;
-	affineTransformations.affineTransformations[ affineTransformationId ].transform.setRowVector( Vector3d(  0.85, 0.04, 0.00 ), 1 );
-	affineTransformations.affineTransformations[ affineTransformationId ].transform.setRowVector( Vector3d( -0.04, 0.85, 0.00 ), 2 );
-	affineTransformations.affineTransformations[ affineTransformationId ].transform.setRowVector( Vector3d(  0.00, 0.00, 1.00 ), 3 );
+	affineTransformations.affineTransformations[ affineTransformationId ].transform.setRowVector( Vector3d(  0.85,  0.04, 0.00 ), 1 );
+	affineTransformations.affineTransformations[ affineTransformationId ].transform.setRowVector( Vector3d( -0.04,  0.85, 0.05 ), 2 );
+	affineTransformations.affineTransformations[ affineTransformationId ].transform.setRowVector( Vector3d(  0.00, -0.05, 0.85 ), 3 );
 	affineTransformations.affineTransformations[ affineTransformationId ].offset.setXYZ( 0, 160, 0 ).scale( scale );
 	affineTransformations.affineTransformations[ affineTransformationId ].probabilityWeight = 0.70; // 0.85;
 	
 	affineTransformationId = 1;
-	affineTransformations.affineTransformations[ affineTransformationId ].transform.setRowVector( Vector3d( -0.15, 0.28, 0.00 ), 1 );
-	affineTransformations.affineTransformations[ affineTransformationId ].transform.setRowVector( Vector3d(  0.26, 0.24, 0.00 ), 2 );
-	affineTransformations.affineTransformations[ affineTransformationId ].transform.setRowVector( Vector3d(  0.00, 0.00, 1.00 ), 3 );
+	affineTransformations.affineTransformations[ affineTransformationId ].transform.setRowVector( Vector3d( -0.15, 0.28,  0.00 ), 1 );
+	affineTransformations.affineTransformations[ affineTransformationId ].transform.setRowVector( Vector3d(  0.26, 0.24, -0.10 ), 2 );
+	affineTransformations.affineTransformations[ affineTransformationId ].transform.setRowVector( Vector3d(  0.00, 0.10,  0.4  ), 3 );
 	affineTransformations.affineTransformations[ affineTransformationId ].offset.setXYZ( 0, 44, 0 ).scale( scale );
 	affineTransformations.affineTransformations[ affineTransformationId ].probabilityWeight = 0.07;
 
 	affineTransformationId = 2;
 	affineTransformations.affineTransformations[ affineTransformationId ].transform.setRowVector( Vector3d( 0.20, -0.26, 0.00 ), 1 );
 	affineTransformations.affineTransformations[ affineTransformationId ].transform.setRowVector( Vector3d( 0.23,  0.22, 0.00 ), 2 );
-	affineTransformations.affineTransformations[ affineTransformationId ].transform.setRowVector( Vector3d( 0.00,  0.00, 1.00 ), 3 );
+	affineTransformations.affineTransformations[ affineTransformationId ].transform.setRowVector( Vector3d( 0.00,  0.00, 0.40 ), 3 );
 	affineTransformations.affineTransformations[ affineTransformationId ].offset.setXYZ( 0, 160, 0 ).scale( scale );
 	affineTransformations.affineTransformations[ affineTransformationId ].probabilityWeight = 0.07;
 
@@ -56,6 +56,16 @@ void Fractal::initAffineTransformations( void )
 	affineTransformations.affineTransformations[ affineTransformationId ].transform.setRowVector( Vector3d( 0.00, 0.00, 0.00 ), 3 );
 	affineTransformations.affineTransformations[ affineTransformationId ].offset.setXYZ( 0, 0, 0 ).scale( scale );
 	affineTransformations.affineTransformations[ affineTransformationId ].probabilityWeight = 0.001; // 0.01;
+
+	affineTransformationId = 4;
+	affineTransformations.affineTransformations[ affineTransformationId ].transform.createRotationXYZ( pi / 4, -pi / 2, 0 ).scale( 0.25 );
+	affineTransformations.affineTransformations[ affineTransformationId ].offset.setXYZ( 0, 120, 0 ).scale( scale );
+	affineTransformations.affineTransformations[ affineTransformationId ].probabilityWeight = 0.07;
+
+	affineTransformationId = 5;
+	affineTransformations.affineTransformations[ affineTransformationId ].transform.createRotationXYZ( -pi / 4, -pi / 2, pi / 8 ).scale( 0.35 );
+	affineTransformations.affineTransformations[ affineTransformationId ].offset.setXYZ( 0, 80, 0 ).scale( scale );
+	affineTransformations.affineTransformations[ affineTransformationId ].probabilityWeight = 0.07;
 
 	/*
 	// Replica 1

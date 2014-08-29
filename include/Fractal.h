@@ -13,7 +13,6 @@ class Fractal
 		//Matrix3x3 replicaTransforms[ maxReplicas ];
 		//Vector3d replicaOffsets[ maxReplicas ];
 		//double replicaProbabilityWeights[ maxReplicas ];
-		AffineTransformations affineTransformations;
 		Vector3d starPositions[ maxPoints ];
 		
 		int numberOfActiveReplicas = 2;
@@ -21,14 +20,15 @@ class Fractal
 		
 	public:
 		
+		AffineTransformations affineTransformations;
 		Vector3d objectOffset;
 		Vector3d starField[ maxPoints ];
 		double rotationXAngle = 0.1;
 		double rotationYAngle = 0.15;
 		double rotationZAngle = 0;
-		double rotationXAngularSpeed = 0.0050;
-		double rotationYAngularSpeed = 0.0005;
-		double rotationZAngularSpeed = 0.0000;
+		double rotationXAngularSpeed = 0.050;
+		double rotationYAngularSpeed = 0.005;
+		double rotationZAngularSpeed = 0.010;
 		
 	public:
 		

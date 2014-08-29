@@ -16,12 +16,13 @@ class Matrix3x3
 	public:
 		
 		Matrix3x3();
-		void identity( void );
-		void createRotationX( double angle );
-		void createRotationY( double angle );
-		void createRotationZ( double angle );
-		void createRotationXYZ( double angleX, double angleY, double angleZ );
-		void createScaleXYZ( double scaleX, double scaleY, double scaleZ );
+		Matrix3x3 & identity( void );
+		Matrix3x3 & createRotationX( double angle );
+		Matrix3x3 & createRotationY( double angle );
+		Matrix3x3 & createRotationZ( double angle );
+		Matrix3x3 & createRotationXYZ( double angleX, double angleY, double angleZ );
+		Matrix3x3 & createScaleXYZ( double scaleX, double scaleY, double scaleZ );
+		Matrix3x3 & scale( double scale );
 		//Matrix3x3 & operator +( const Matrix3x3 & rhs );
 		Matrix3x3 & operator *( const Matrix3x3 & rhs );
 		Vector3d operator *( const Vector3d & rhs );

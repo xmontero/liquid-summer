@@ -6,7 +6,7 @@ Matrix3x3::Matrix3x3()
 	identity();
 }
 
-void Matrix3x3::identity( void )
+Matrix3x3 & Matrix3x3::identity( void )
 {
 	for( int i = 0; i < 3; i++ )
 	{
@@ -15,9 +15,11 @@ void Matrix3x3::identity( void )
 			a[ i ][ j ] = ( i == j ) ? 1 : 0;
 		}
 	}
+	
+	return ( * this );
 }
 
-void Matrix3x3::createRotationX( double angle )
+Matrix3x3 & Matrix3x3::createRotationX( double angle )
 {
 	//      |  1    0        0     |
 	// Rx = |  0  cos(a)  -sin(a)  |
@@ -28,9 +30,11 @@ void Matrix3x3::createRotationX( double angle )
 	a[ 1 ][ 2 ] = -sin( angle );
 	a[ 2 ][ 1 ] = sin( angle );
 	a[ 2 ][ 2 ] = cos( angle );
+
+	return ( * this );
 }
 
-void Matrix3x3::createRotationY( double angle )
+Matrix3x3 & Matrix3x3::createRotationY( double angle )
 {
 	//      |   cos(b)  0  sin(b)  |
 	// Ry = |     0     1    0     |
@@ -41,9 +45,11 @@ void Matrix3x3::createRotationY( double angle )
 	a[ 0 ][ 2 ] = sin( angle );
 	a[ 2 ][ 0 ] = -sin( angle );
 	a[ 2 ][ 2 ] = cos( angle );
+	
+	return ( * this );
 }
 
-void Matrix3x3::createRotationZ( double angle )
+Matrix3x3 & Matrix3x3::createRotationZ( double angle )
 {
 	//      |  cos(c)  -sin(c)  0  |
 	// Rz = |  sin(c)   cos(c)  0  |
@@ -54,9 +60,11 @@ void Matrix3x3::createRotationZ( double angle )
 	a[ 0 ][ 1 ] = -sin( angle );
 	a[ 1 ][ 0 ] = sin( angle );
 	a[ 1 ][ 1 ] = cos( angle );
+	
+	return ( * this );
 }
 
-void Matrix3x3::createRotationXYZ( double angleX, double angleY, double angleZ )
+Matrix3x3 & Matrix3x3::createRotationXYZ( double angleX, double angleY, double angleZ )
 {
 	Matrix3x3 rX;
 	Matrix3x3 rY;
@@ -67,14 +75,31 @@ void Matrix3x3::createRotationXYZ( double angleX, double angleY, double angleZ )
 	rZ.createRotationZ( angleZ );
 	
 	( * this ) = ( rX * rY ) * rZ;
+	
+	return ( * this );
 }
 
-void Matrix3x3::createScaleXYZ( double scaleX, double scaleY, double scaleZ )
+Matrix3x3 & Matrix3x3::createScaleXYZ( double scaleX, double scaleY, double scaleZ )
 {
 	identity();
 	a[ 0 ][ 0 ] = scaleX;
 	a[ 1 ][ 1 ] = scaleY;
 	a[ 2 ][ 2 ] = scaleZ;
+	
+	return ( * this );
+}
+
+Matrix3x3 & Matrix3x3::scale( double scale )
+{
+	for( int i = 0; i < 3; i++ )
+	{
+		for( int j = 0; j < 3; j++ )
+		{
+			a[ i ][ j ] *= scale;
+		}
+	}
+	
+	return ( * this );
 }
 
 /*

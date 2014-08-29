@@ -540,20 +540,23 @@ void LiquidSummer::drawStarField( void )
 		starField.rotationYAngularSpeed = 0.02 * normalizedMouseX;
 		starField.rotationXAngularSpeed = 0.02 * normalizedMouseY;
 		
-		fractal.rotationYAngularSpeed = starField.rotationYAngularSpeed;
-		fractal.rotationXAngularSpeed = starField.rotationXAngularSpeed;
+		//fractal.rotationYAngularSpeed = starField.rotationYAngularSpeed;
+		//fractal.rotationXAngularSpeed = starField.rotationXAngularSpeed;
 		
-		//fractal.rotationXAngle = normalizedMouseY * pi;
-		//fractal.rotationYAngle = normalizedMouseX * pi;
+		fractal.rotationXAngle = normalizedMouseY * pi;
+		fractal.rotationYAngle = normalizedMouseX * pi;
 	}
 	
 	if( mouseValidRight )
 	{
-		//double normalizedMouseX = ( mouseXRight - SCREEN_WIDTH / 2.0 ) / ( SCREEN_WIDTH / 2.0 );
-		//double normalizedMouseY = ( mouseYRight - SCREEN_HEIGHT / 2.0 ) / ( SCREEN_HEIGHT / 2.0 );
+		double normalizedMouseX = ( mouseXRight - SCREEN_WIDTH / 2.0 ) / ( SCREEN_WIDTH / 2.0 );
+		double normalizedMouseY = ( mouseYRight - SCREEN_HEIGHT / 2.0 ) / ( SCREEN_HEIGHT / 2.0 );
 		
 		//starField.rotationYAngularSpeed = 0.02 * normalizedMouseX;
 		//starField.rotationXAngularSpeed = 0.02 * normalizedMouseY;
+		
+		fractal.affineTransformations.affineTransformations[ 5 ].transform.createRotationXYZ( normalizedMouseX * pi, normalizedMouseY * pi, 0 ).scale( 0.25 );
+		//fractal.affineTransformations.affineTransformations[ 4 ].offset.setXYZ( 0, mouseYRight, 0 );
 		
 		//fractal.rotationYAngularSpeed = starField.rotationYAngularSpeed;
 		//fractal.rotationXAngularSpeed = starField.rotationXAngularSpeed;
